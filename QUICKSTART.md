@@ -37,4 +37,6 @@ Output: `build/arm64/tmp/deploy/images/genericarm64/*.wic`
 - The build scripts auto-run `init.sh` if needed, so step 1 is optional.
 - Default image is `core-image-base`; change it with `IMAGE=...`, e.g.
   `IMAGE=core-image-minimal ./scripts/build-arm64.sh`.
+- Base utilities are BusyBox by default; for full GNU utilities use
+  `BASE_UTILS=full ./scripts/build-arm64.sh`.
 - More detail: [docs/how-to-build.md](docs/how-to-build.md).

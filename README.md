@@ -82,6 +82,19 @@ IMAGE=core-image-full-cmdline ./scripts/build-arm64.sh
 IMAGE=core-image-minimal      ./scripts/build-x86_64.sh
 ```
 
+### Base utilities: BusyBox or full GNU
+
+Both targets use **BusyBox** for the core utilities by default. To build with
+the full GNU coreutils/util-linux set (and drop BusyBox), set `BASE_UTILS=full`:
+
+```bash
+BASE_UTILS=full ./scripts/build-x86_64.sh
+BASE_UTILS=full ./scripts/build-arm64.sh
+```
+
+See [how-to-customize.md](docs/how-to-customize.md#busybox-vs-full-gnu-utilities)
+for details.
+
 Other useful overrides (see `scripts/lib/common.sh`):
 
 | Variable        | Default          | Purpose                          |
