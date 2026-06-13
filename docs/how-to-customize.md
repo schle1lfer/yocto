@@ -1,7 +1,9 @@
 # How to customize the builds
 
 This guide covers the common changes you'll want to make: adding packages,
-changing the image, and adjusting bootloader/feature settings. All
+changing the image, and adjusting bootloader/feature settings. To create a new
+recipe or modify an existing one (`.bb` / `.bbappend` / `devtool`), see
+[how-to-add-a-recipe.md](how-to-add-a-recipe.md). All
 configuration lives in `scripts/conf/` and is applied to each build's
 `conf/local.conf` as an idempotent, re-generated block — so edit the fragments
 here, **not** the generated `build/*/conf/local.conf` (your edits there would

@@ -22,6 +22,7 @@ Step-by-step how-to guides live in [`docs/`](docs/):
 | [how-to-build.md](docs/how-to-build.md) | Build each target, pick an image, tune the build |
 | [how-to-flash-and-run.md](docs/how-to-flash-and-run.md) | Run in QEMU and flash images to hardware |
 | [how-to-customize.md](docs/how-to-customize.md) | Add packages, change images, adjust features/layers |
+| [how-to-add-a-recipe.md](docs/how-to-add-a-recipe.md) | Create a new recipe or customize an existing one (.bbappend, devtool) |
 | [bootloaders.md](docs/bootloaders.md) | Why x86_64 uses GRUB and arm64 uses U-Boot + GRUB |
 
 ## Layout
