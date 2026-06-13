@@ -12,6 +12,18 @@ On Arm, U-Boot runs as the first-stage bootloader and provides a UEFI
 environment that loads GRUB, which in turn boots the kernel — so the arm64
 target builds and ships both bootloaders.
 
+## Documentation
+
+Step-by-step how-to guides live in [`docs/`](docs/):
+
+| Guide | What it covers |
+| ----- | -------------- |
+| [how-to-setup.md](docs/how-to-setup.md) | Install host dependencies and initialize the workspace |
+| [how-to-build.md](docs/how-to-build.md) | Build each target, pick an image, tune the build |
+| [how-to-flash-and-run.md](docs/how-to-flash-and-run.md) | Run in QEMU and flash images to hardware |
+| [how-to-customize.md](docs/how-to-customize.md) | Add packages, change images, adjust features/layers |
+| [bootloaders.md](docs/bootloaders.md) | Why x86_64 uses GRUB and arm64 uses U-Boot + GRUB |
+
 ## Layout
 
 ```
@@ -25,6 +37,7 @@ scripts/
     ├── common.conf.inc  # Packages/features added to every image
     ├── x86_64.conf.inc  # x86_64 machine + GRUB settings
     └── arm64.conf.inc   # arm64 machine + U-Boot/GRUB settings
+docs/                    # How-to guides (see Documentation above)
 ```
 
 Cloned layers land in `sources/`, build output in `build/<target>/`. Both are
