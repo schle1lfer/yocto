@@ -1,0 +1,15 @@
+# Yocto workspace artifacts - never commit these (they are huge and generated)
+/sources/
+/build/
+
+# Common Yocto/OE build outputs in case paths are overridden
+tmp/
+sstate-cache/
+downloads/
+*.lock
+bitbake-cookerdaemon.log
+
+# Editor / OS noise
+*.swp
+*~
+.DS_Store
