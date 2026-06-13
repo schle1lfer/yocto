@@ -68,6 +68,33 @@ EXTRA_IMAGE_FEATURES ?= "ssh-server-openssh package-management"
 
 Then set a real password / user via your own recipe or `extrausers`.
 
+## BusyBox vs. full GNU utilities
+
+By default the core utilities (the shell and applets like `ls`, `cat`, `mount`,
+`vi`, …) are provided by **BusyBox** — Yocto's compact default. A few full
+tools (`vim`, `nano`, full `wget`/`curl`/`util-linux`, …) are layered on top via
+`common.conf.inc`. This is identical on both the x86_64 and arm64 targets.
+
+Switch the whole base userspace to **full GNU coreutils/util-linux** (and remove
+BusyBox) with the `BASE_UTILS` env var — no file edits needed:
+
+```bash
+BASE_UTILS=full ./scripts/build-x86_64.sh     # full GNU utilities
+BASE_UTILS=full ./scripts/build-arm64.sh
+./scripts/build-arm64.sh                        # default: busybox
+```
+
+Under the hood (`scripts/lib/common.sh`), `BASE_UTILS=full` writes:
+
+```bash
+VIRTUAL-RUNTIME_base-utils = "packagegroup-core-base-utils"
+VIRTUAL-RUNTIME_base-utils-hwclock = "util-linux-hwclock"
+PACKAGE_EXCLUDE += "busybox"
+```
+
+To make `full` the permanent default, change the default in
+`scripts/lib/common.sh`: `: "${BASE_UTILS:=busybox}"`.
+
 ## Bootloader settings
 
 The per-target fragments control booting:

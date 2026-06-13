@@ -31,6 +31,12 @@ REPO_ROOT="$(cd "${COMMON_SH_DIR}/../.." && pwd)"
 # build script, e.g.  IMAGE=core-image-full-cmdline ./scripts/build-arm64.sh
 : "${IMAGE:=core-image-base}"
 
+# Base userspace utilities. Applies to BOTH targets identically.
+#   busybox - compact BusyBox applets for the core utils (Yocto default)
+#   full    - full GNU coreutils/util-linux/etc., BusyBox removed
+# Override e.g.  BASE_UTILS=full ./scripts/build-arm64.sh
+: "${BASE_UTILS:=busybox}"
+
 # Number of bitbake worker threads / make jobs. Defaults to the host CPU count.
 : "${BB_NUMBER_THREADS:=$(nproc 2>/dev/null || echo 4)}"
 : "${PARALLEL_MAKE_JOBS:=${BB_NUMBER_THREADS}}"
@@ -169,10 +175,34 @@ SSTATE_DIR = "${SOURCES_DIR}/sstate-cache"
 INHERIT += "rm_work"
 EOF
 
-    apply_managed_block "${conf}" "project-perf"     "${perf_block}"
-    apply_managed_block "${conf}" "project-common"   "${REPO_ROOT}/scripts/conf/common.conf.inc"
-    apply_managed_block "${conf}" "project-platform" "${platform_fragment}"
-    rm -f "${perf_block}"
+    # --- Base utilities selection (dynamic) ----------------------------------
+    # Toggle BusyBox vs. full GNU utilities via the BASE_UTILS env var.
+    local utils_block
+    utils_block="$(mktemp)"
+    case "${BASE_UTILS}" in
+        full)
+            cat > "${utils_block}" <<EOF
+# BASE_UTILS=full: use full GNU coreutils/util-linux/etc. instead of BusyBox.
+VIRTUAL-RUNTIME_base-utils = "packagegroup-core-base-utils"
+VIRTUAL-RUNTIME_base-utils-hwclock = "util-linux-hwclock"
+PACKAGE_EXCLUDE += "busybox"
+EOF
+            ;;
+        busybox)
+            cat > "${utils_block}" <<EOF
+# BASE_UTILS=busybox: BusyBox provides the base utilities (Yocto default).
+EOF
+            ;;
+        *)
+            _die "Invalid BASE_UTILS='${BASE_UTILS}' (expected 'busybox' or 'full')"
+            ;;
+    esac
 
-    _log "Configured $(basename "${BUILDDIR}"): $(grep -m1 '^MACHINE' "${conf}")"
+    apply_managed_block "${conf}" "project-perf"      "${perf_block}"
+    apply_managed_block "${conf}" "project-common"    "${REPO_ROOT}/scripts/conf/common.conf.inc"
+    apply_managed_block "${conf}" "project-baseutils" "${utils_block}"
+    apply_managed_block "${conf}" "project-platform"  "${platform_fragment}"
+    rm -f "${perf_block}" "${utils_block}"
+
+    _log "Configured $(basename "${BUILDDIR}"): $(grep -m1 '^MACHINE' "${conf}") (base-utils: ${BASE_UTILS})"
 }

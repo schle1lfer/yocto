@@ -88,6 +88,7 @@ Other useful overrides (see `scripts/lib/common.sh`):
 | --------------- | ---------------- | -------------------------------- |
 | `YOCTO_RELEASE` | `wrynose`        | Yocto branch/codename to track   |
 | `IMAGE`         | `core-image-base`| Image recipe to build            |
+| `BASE_UTILS`    | `busybox`        | Base utilities: `busybox` or `full` GNU |
 | `SOURCES_DIR`   | `./sources`      | Where layers are cloned          |
 | `BUILD_ROOT`    | `./build`        | Where build output is written    |
 
